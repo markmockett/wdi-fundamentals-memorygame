@@ -1,14 +1,6 @@
 console.log("Up and running!");
 
-var cardOne = "queen";
-var cardTwo = "queen";
-var cardThree = "king";
-var cardFour = "king";
-
-//console.log("User flipped " + cardOne);
-//console.log("User flipped " + cardThree);
-
-var cards;
+var cards; var createBoard; var cardElement; var i;
 var cardOne; var cardTwo; var cardThree; var cardFour;
 var cardsInPlay; var flipCard; var cardId; var checkForMatch;
 
@@ -34,6 +26,8 @@ cards = [
     cardImage: 'images/king-of-diamonds.png'
   }
 ];
+
+// Create an array to store the cards in play
 cardsInPlay = [];
 
 checkForMatch = function () {
@@ -45,27 +39,47 @@ checkForMatch = function () {
       }
 };
 
-flipCard = function (cardId) {
+flipCard = function () {
 
-  // Display the card the user just flipped in the console.
-    console.log("User flipped " + cards[cardId].rank );
+  // Get the data-id of card just flipped and store it.
+    cardId = this.getAttribute('data-id');
+    console.log(cardId);
 
   // Add card to array of cards that are in play
-    cardsInPlay.push(cards[cardId].rank );
+    cardsInPlay.push(cards[cardId].rank);
 
-  // Display the image path in the console
-    console.log(cards[cardId].cardImage)
-
-  // Display the suit in the console
-    console.log(cards[cardId].suit)
+  // Display the image of the card
+    this.setAttribute('src', cards[cardId].cardImage);
 
   // Check to see if two cards have been played
   if (cardsInPlay.length === 2) {
     // If so, call the checkForMatch function
-    checkForMatch(); //Otherwise reset
-    cardsInPlay = []
-  }
+    checkForMatch();
+    //Otherwise empty array
+   cardsInPlay = [];  }
 };
 
-flipCard(0);
-flipCard(1);
+createBoard=function() {
+  // Loop through your cards array to create card elements for your board
+  for ( i = 0; i < cards.length; i++) {
+    // Create an img element which will be used as a card
+    cardElement = document.createElement('img');
+
+    // Set the src attribute to display the back of card image
+    cardElement.setAttribute('src', 'images/back.png');
+
+		// Set the card's 'data-id' attribute to be the index of the current element
+    // data- attributes are meant to store data about an element that is not tied to a style.
+    cardElement.setAttribute('data-id', i);
+
+		// Add an event listener so that when a card is clicked,
+    // the function flipCard will be executed
+    cardElement.addEventListener('click', flipCard);
+
+    // Append the card to the board
+    document.getElementById('game-board').appendChild(cardElement);
+  }
+}
+
+//Call the flipcard function
+createBoard();
